@@ -1,9 +1,3 @@
-/*
-let saludo = "hola"
-let nombre = "Tabito"
-
-console.log (`Hola ${saludo}, saludos a ${nombre}`)
-*/
 
 class Usuario {
     constructor(nombre, apellido){
