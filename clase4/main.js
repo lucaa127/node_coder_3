@@ -1,140 +1,127 @@
+const fs = require('fs/promises');
+
 class Contenedor{
-
     constructor(archivo){
-        this.archivo = archivo;
-        
-        }
-
-    getAll() {
-
-        let ruta = "./" + this.archivo;
-        const fs = require('fs')
-
-        let data;
-
-        data = fs.readFileSync(ruta, 'utf-8', (err, cont) => {
-            if (err) {
-                console.log('error: ', + err)
-            }
-        })
-
-        if (data === "") {
-            data = []
-            return data
-        } else {return JSON.parse(data)}
-    
+        this.archivoRuta = archivo;
     }
+    //métodos
 
-    save(objeto){
-            let ruta = "./" + this.archivo;
-            const fs = require('fs')
-            const arrObj = this.getAll();
+    //mostrar objetos del archivo
+    async getAll(){ 
+
+        try { 
+            const objetos = await fs.readFile(this.archivoRuta,'UTF-8');
+            return JSON.parse(objetos);
+            }
+          catch(error){
+            return([]);
+          }
+        };
+
+    //mostrar objeto por id    
+    async getById(id){
+        try {
+            let objetos = await this.getAll();
+            objetos = objetos.find(x => x.id == id)
             
-            let newId = 0
+            if (objetos === undefined){
+                return `No se pudo encontrar el producto con id: ${id}`;
+                } else {
+            return objetos;}
 
-                if (arrObj.length == 0) {
-                    newId = 1
-                }   else    {
-                    newId = arrObj[arrObj.length - 1].id + 1
-                }
-            
-            const newObj = {...objeto, id: newId}
-            arrObj.push(newObj)         
+        }   catch(error) { return 'Error al buscar producto por ID'}
+    };
 
-         //WRITE
-
-            async function write() {
-                   try {
-                
-                    await fs.promises.writeFile(ruta,JSON.stringify(arrObj))
-                    console.log ("Producto registrado con id: " + newId)
-                    
-                }
-                    catch(err) {
-                    //errc
-                    console.log("error escritura")
-                    }
-                };
-
-            write();
-        return newId;
-
-            } //CIERRE METODO SAVE
     
+    // guardar objeto    
+    async save(objeto){
+        try{
+            const objetos = await this.getAll();
+            let newId = 0;
 
-    getById(id){
+                if (objetos.length == 0){
+                    newId = 1;
+                } else {
 
-                const arrObj = this.getAll();
-                let objByID = arrObj.find (obj => obj.id == id)
-                if (objByID === undefined) {objByID = null}
-                console.log(objByID)
-                
-            }
+                    let valorIds = objetos.map( ids => { return parseInt(ids.id) } );
+                    let maxID = Math.max(...valorIds)
 
-    deleteById(id){
-        const fs = require('fs')
-        let ruta = "./" + this.archivo;
-        const arrObj = this.getAll();
-        let newObj = arrObj.filter (obj => obj.id !== id)
-        let objJson = JSON.stringify(newObj)
-
-
-            async function reWrite() {
-                try {
-            
-                await fs.promises.writeFile(ruta,objJson,null,2)
-                console.log (`objeto id: ${id} eliminado`)
-                //console.log (newObj)
-            }
-                catch(err) {
-                //errc
-                console.log("error de escritura")
-                }
-            };
-
-            reWrite();
-        }
- 
-
-    deleteAll(){
-
-        const fs = require('fs')
-        let ruta = "./" + this.archivo;
- 
-                async function del() {
-                    try {
-                
-                    await fs.promises.writeFile(ruta,JSON.stringify([]))
-                    console.log ("Se ha borrado el contenido del archivo")
-                    
-                }
-                    catch(err) {
-                    //err
-                    console.log("error de eliminando contenido")
-                    }
+                    newId = maxID + 1;
                 };
 
-            del();
-        }
+            const objetoNuevo = {...objeto,id: newId};
+              objetos.push(objetoNuevo);
 
-    } //CIERRE CONTENEDOR
+            await fs.writeFile(this.archivoRuta, JSON.stringify(objetos));
 
-
-// PRUEBAS 
-
-        let archivo1 = new Contenedor("file.txt")
+        } catch(error) {
+            console.log('Error al guardar');
+            }
+    };       
         
-        let producto1 = {title: "Producto 1", price: 1999.9, thumbnail: "url del primer producto"}
-        let producto2 = {title: "Producto 2", price: 2999.9, thumbnail: "url del producto 2"}
-        let producto3 = {title: "Producto 3", price: 900.0, thumbnail: "url del tercer producto"}
+    //eliminar por id
+    async deleteById(id) {
+        try{
+            let objetos = await this.getAll();
+            const objToDelete = objetos.findIndex(x => x.id == id);
+                if (objToDelete !== -1){
+                   objetos = objetos.filter(x => x.id !== id);
+                   await fs.writeFile(this.archivoRuta,JSON.stringify(objetos));
+            } else {
+                   console.log (`El producto id:${id}, no existe.`)
+            }
+        } catch(error) {
+            console.log ('Error al eliminar por ID')
+        }
+    };
+
+    //limpiar el archivo
+    async deleteAll(){
+        try{
+                await fs.writeFile(this.archivoRuta,JSON.stringify([]));
+                return 'Se han eliminado todos los productos correctamente';
+              }   catch(error)    {
+                    return 'error al eliminar los productos';
+        }      
+    };
+
+};
 
 
-//archivo1.save(producto2);
 
-// let leerArchivo = archivo1.getAll();
-// console.log(leerArchivo)
+
+
+//Ejecuto los métodos
+
+const archivo = new Contenedor('./file.txt');
     
-//archivo1.getById(3);       
-      
-//archivo1.deleteById(3)
-//archivo1.deleteAll()
+async function ejecutar(){
+    try {
+        //save
+        let producto1 = {title: "Producto 1", price: 1999.9, thumbnail: "url del primer producto"}
+        let producto2 = {title: "Producto 2", price: 1800, thumbnail: "url del segundo producto"}
+        
+        //await archivo.save(producto1);
+        //await archivo.save(producto2);
+
+        //get by id    
+
+        //console.log(await archivo.getById(1));
+
+        //get All
+            //console.log(await archivo.getAll());
+
+
+        //delete by id 
+           // await archivo.deleteById(3);    
+
+        //delete all
+            //console.log (await archivo.deleteAll()); 
+
+
+        }   catch(error)  { console.log('error') };
+
+};
+
+
+ejecutar();
