@@ -87,5 +87,6 @@ class Contenedor{
 
 };
 
+let file = new Contenedor('./file.txt')
 
-module.exports = Contenedor;
+module.exports = file;

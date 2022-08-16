@@ -1,9 +1,9 @@
 const express = require('express');
-const Contenedor = require('./main.js');
+//const Contenedor = require('./main.js');
+const file = require('./main.js')
 const app = express();
 
-
-let file = new Contenedor("./file.txt");
+//let file = new Contenedor("./file.txt");
 
 let files;
 
@@ -11,14 +11,17 @@ async function readFile() {
                 try { 
                     files = await file.getAll();
                     //console.log(files);
+                    return files;
             } catch(error) { console.log(error); } 
         };
 
-async function randomProd(id) {
-    try { 
-            let randomData = await file.getById(id);
-            return randomData;
-    } catch(error) { console.log(error); } 
+const randomProd = async function(id) {
+        
+                try { 
+                        let randomData = await file.getById(id);
+                        return randomData;
+                } catch(error) { console.log(error); } 
+    
 };
 
 
@@ -27,25 +30,23 @@ app.get('/', (request,response)=>{
 })
 
 app.get('/productos', (req, res) => {
+
     res.send(files);
+
 })
 
 
 app.get('/productoRandom', (req, res) => {
    
     let random = (Math.floor(Math.random() * files.length)+ 1);
-    //let randomProd = file.getById(random);
-    let dataRand; 
-    async () => {
-        dataRand = await randomProd(random) ;
-        console.log(dataRand)
-        
-    }
-
-    res.send(dataRand);
-
-})
-
+    
+        (async function(){
+            let objRandom = await randomProd(random);
+            console.log(objRandom)
+            res.send(objRandom);
+        })();
+    })
+    
 
 app.get('*', (request,response)=>{
     response.send('Error 404 - Page not found')
