@@ -1,0 +1,26 @@
+extends layout
+
+block formulario
+
+    section.p-4(style="border:solid 1px; background-color:rgb(246, 255, 253); width:90%; margin:auto;")
+     h2(style="color: blue; margin-bottom:10px;")="Lista de productos"
+     if statusList
+      table.table
+       thead
+        tr 
+         th(scope="col")="#"
+         th(scope="col")="Producto "
+         th(scope="col")="Precio "
+         th(scope="col")="Img "
+       tbody 
+        each data of datos
+         tr 
+          th(scope="row")=data.id
+          td=data.title
+          td=data.price
+          td
+           img(width='50' heigh='50' src=data.thumbnail) 
+     else
+      span.badge.bg-info.text-dark.p-4="No hay productos registrados"
+      br
+     a(href='/') Registrar productos

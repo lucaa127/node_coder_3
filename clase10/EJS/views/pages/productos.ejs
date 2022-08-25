@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head')%>
+</head>
+<body>
+    
+
+
+<section class="p-4" style="border:solid 1px; background-color:rgb(246, 255, 253); width:90%; margin:auto;">
+
+    <h2 style="color: blue; margin-bottom:10px;">Lista de productos</h2>
+    
+    
+    <% if(statusList){ %>
+        <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Img</th>
+            </tr>
+        </thead>
+        <tbody>
+    
+            <% for (const prod of datos) { %>
+                <tr>
+                <th scope="row"><%=prod.id%></th>
+                <td><%=prod.title%></td>
+                <td><%=prod.price%></td>
+                <td><img width="50" height="50" src="<%=prod.thumbnail%>"> </td>
+                </tr>
+                <% } %>
+    
+        </tbody>
+        </table>
+    
+    
+      <% } else { %>
+        
+        <span class="badge bg-info text-dark p-4">No hay productos registrados</span><br>
+    
+        <% }%>
+    
+    <br><a href="/">Registrar productos</a>
+    
+    </section>
+
+</body>
+</html>
