@@ -18,7 +18,7 @@ class Producto {
             return([]);
           }
         };
-
+        
 
     async buscarProducto(id){
         try {   
@@ -46,9 +46,13 @@ class Producto {
                 let maxId = Math.max(...prodIds);
                 newId = maxId + 1;
             };
+            const dtNow = Date.now();
+            const fecha = new Date(dtNow);
 
-            const nuevoObjeto = {...producto, id: newId};
-            this.productos.push(nuevoObjeto);
+            const nuevoObjeto = {...producto,timestamp: fecha ,id: newId};
+            prods.push(nuevoObjeto);
+            await fs.writeFile(this.archivoRuta, JSON.stringify(prods));
+            //this.productos.push(nuevoObjeto);
 
         }   catch(error)    {console.log(error)};
 

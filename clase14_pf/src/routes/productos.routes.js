@@ -26,6 +26,7 @@ productosRouter.post('/', async function(req,res) {
     const datos = req.body;
     await productos.agregarProducto(datos);
     res.redirect('/');
+
 })
 
 module.exports = productosRouter;

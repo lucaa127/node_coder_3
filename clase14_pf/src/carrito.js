@@ -102,7 +102,6 @@ class Carrito {
                     return 'El carrito no existe'
                 }
             }) 
-            //carritoPorId.productos.push(productos)
 
         }       catch(error)    {console.log(error)};
 
@@ -132,12 +131,19 @@ class Carrito {
             const obtenerCarritos = await this.listarCarritos();
             const carritoPorId = obtenerCarritos.find( x => x.id == idc);
 
+            console.log(carritoPorId)
+
+            if(carritoPorId == undefined){
+               return {error: `El carrito id: ${idc} no existe.`};
+            } else {
             obtenerCarritos.map(async cart => {
-                if(cart.id == carritoPorId.id){
+                if(cart.id != 0){
                     cart.productos.splice (idp - 1, 1);
                     await fs.writeFile(this.archivoRuta, JSON.stringify(obtenerCarritos));
                         } 
                     });
+
+                };
 
             }    catch(error)  {console.log(error)};
     };
@@ -147,23 +153,3 @@ class Carrito {
 let carrito = new Carrito('./carrito.txt')
 
 module.exports = carrito;
-
-
-
-            // carritoPorId.productos.splice (idp - 1, 1)
-
-            // obtenerCarritos.
-
-
-            // console.log(carritoPorId)
-            //     if(carritoPorId == undefined){
-            //         return 'El carrito no existe';
-                    
-            //     } else {
-
-                    
-            //         obtenerCarritos.splice (id - 1, 1)
-            //         await fs.writeFile(this.archivoRuta, JSON.stringify(obtenerCarritos));
-            //         return {mensaje: `Se ha vaciado el carrito id: ${id}`};
-        //}  
-   // }
