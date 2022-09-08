@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended:true }));
 
 //          - ruouter
 const productosRouter = require('./src/routes/productos.routes.js');
@@ -14,10 +16,11 @@ app.get('/', (request,response)=>{
     response.send('1ra entrega Proyecto Final');
 });
 app.get('*', (request,response)=>{
-    response.send('Error 404 - Page not found')
-});
+    const metodo = request.method;
+    const ruta = request.originalUrl;
 
-//
+    response.send(`{error : -2, descripcion: 'ruta ${ruta} método ${metodo}, no implementada'}`);
+});
 
 
 const PORT = 8080;
