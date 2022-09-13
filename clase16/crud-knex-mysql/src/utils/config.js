@@ -4,8 +4,8 @@ export const config = {
         client: 'mssql',
         connection: {
             host: 'localhost',
-            user: 'sa',
-            password: 'Lleave11',
+            user: 'x',
+            password: 'x',
             database: 'test',
             options: {
                 port: 63598
