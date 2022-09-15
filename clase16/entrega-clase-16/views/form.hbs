@@ -1,0 +1,64 @@
+
+{{!-- <br><form action="/api/productos" method="POST" id="form"></form> --}}
+
+<br><form id="form">
+
+    <section class="p-3" style="border:solid 1px; background-color:rgb(239, 253, 253); width:98%; max-width:700px; margin:auto;">
+        <h2 style="color: blue; margin-bottom:10px;">Ingrese producto</h2>
+            <div class="mb-3">
+                <label for="title" class="form-label">Nombre</label>
+                <input type="text" name="title" class="form-control" id="title" required placeholder="Nombre del producto">
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Precio</label>
+                <input type="number" class="form-control" name="price"  id="price"  required placeholder="Precio del producto">
+            </div>
+            <div class="mb-3">
+                <label for="thumbnail" class="form-label">Imagen</label>
+                <input type="text" class="form-control" name="thumbnail"  id="thumbnail" required  placeholder="URL de la imagen">
+            </div>
+
+            <button type="submit" class="btn btn-secondary">Enviar</button><br>
+
+            <br>
+                  {{>tabla}}
+
+            <br>
+    </section>
+
+
+</form>
+
+
+
+<br><form id="form2">
+
+    <section class="p-3" style="border:solid 1px; background-color:rgb(239, 253, 253); width:98%; max-width:700px; margin:auto;">
+        <h2 style="color: blue; margin-bottom:10px;">Chat en línea</h2>
+            <div class="mb-3">
+                <label for="title" class="form-label">Correo:</label>
+                <input type="mail" name="mail" class="form-control" id="mail" required placeholder="ejemplo@mail.com">
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Mensaje:</label>
+                <input type="text" class="form-control" name="msj"  id="msj"  required placeholder="Ingrese su mensaje">
+            </div>
+
+            <button type="submit" class="btn btn-secondary" onclick="sendMessage()">Enviar</button><br>
+
+            <br>
+        <div id="chat">
+            <!-- aqui se renderizan los mensajes recibidos por parte del server -->
+        </div>
+
+            <br>
+    </section>
+
+
+</form>
+
+
+
+
+
+
